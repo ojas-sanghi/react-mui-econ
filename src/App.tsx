@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Component } from 'react'
 import "./App.css";
 import "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import faker from "@faker-js/faker";
-import { Box, Container, AppBar, Toolbar, Typography, Grid, styled, Paper } from "@mui/material";
+import { Box, Container, AppBar, Toolbar, Typography, Grid, styled, Paper, Button } from "@mui/material";
+import Select from 'react-select'
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -76,6 +77,15 @@ function TopBar() {
   );
 }
 
+function TestSelect() {
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
+  return ( <Select options={options} /> );
+}
+
 function App() {
   return (
     <Container maxWidth={false} disableGutters={true}>
@@ -89,9 +99,13 @@ function App() {
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={6}>
           {Chart()}
+          asd
+          asd
+          asd
+          <Button variant="contained" color="primary"> asd </Button>
         </Grid>
         <Grid item xs={6}>
-          {Chart()}
+          {TestSelect()}
         </Grid>
       </Grid>
     </Container>
