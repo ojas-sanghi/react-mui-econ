@@ -12,13 +12,11 @@ import {
   Grid,
   styled,
   Paper,
-  Button,
   Divider,
   Radio,
   RadioGroup,
   FormControl,
   FormControlLabel,
-  FormLabel,
 } from "@mui/material";
 import Select, { SingleValue } from "react-select";
 import { Determinant, SubDeterminant } from "./shift-calc/Determinant";
