@@ -1,21 +1,24 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from "react";
 import "./App.css";
 import "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import faker from "@faker-js/faker";
 import { Box, Container, AppBar, Toolbar, Typography, Grid, styled, Paper, Button } from "@mui/material";
-import Select from 'react-select'
+import Select, { SingleValue } from "react-select";
+import { Determinant, SubDeterminant } from "./shift-calc/Determinant";
+import { supplyDeterminants, demandDeterminants, emptySubDet, emptyDet } from "./shift-calc/AllDeterminants";
+import { ShiftBehaviors } from "./shift-calc/ShiftEnums";
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: 'center',
+  textAlign: "center",
   color: theme.palette.text.secondary,
 }));
 
 function Chart() {
-  const options = {
+  const chartOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -28,39 +31,27 @@ function Chart() {
     },
   };
 
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ];
+  const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
   const data = {
     labels,
     datasets: [
       {
         label: "Dataset 1",
-        data: labels.map(() =>
-          faker.datatype.number({ min: -1000, max: 1000 })
-        ),
+        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
         label: "Dataset 2",
-        data: labels.map(() =>
-          faker.datatype.number({ min: -1000, max: 1000 })
-        ),
+        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
 
-  return <Line data={data} options={options} />;
+  return <Line data={data} options={chartOptions} />;
 }
 
 function TopBar() {
@@ -77,35 +68,63 @@ function TopBar() {
   );
 }
 
-function TestSelect() {
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]
-  return ( <Select options={options} /> );
-}
+const supplyDetOptions = supplyDeterminants.map((det) => ({
+  value: det,
+  label: det.shortName,
+}));
+
+const demandDetOptions = demandDeterminants.map((det) => ({
+  value: det,
+  label: det.shortName,
+}));
+
 
 function App() {
+  const [selectedDeterminant, setSelectedDeterminant] = useState(emptyDet);
+
+  function handleDeterminantChange(determinantVal: SingleValue<{ value: Determinant; label: string }>) {
+    var det = determinantVal?.value;
+
+    if (det === undefined) {
+      throw new TypeError("Determinant change gave an undefined!");
+    }
+
+    setSelectedDeterminant(det);
+  }
+
+  function handleSubDeterminantChange(subDeterminantVal: SingleValue<{ value: SubDeterminant; label: string }>)
+  {
+    console.log(subDeterminantVal);
+  }
+
+  const SubDeterminant = ({ determinant }: { determinant: Determinant }) => {
+    if (determinant.subDeterminants.length === 0) {
+      return <Select isDisabled={true} placeholder="No sub-determinants available" />;
+    }
+  
+    var subDetOptions = determinant.subDeterminants.map((subDet) => ({
+      value: subDet,
+      label: subDet.shortName,
+    }));
+  
+    return <Select options={subDetOptions} onChange={handleSubDeterminantChange} />;
+  };
+
   return (
     <Container maxWidth={false} disableGutters={true}>
       {TopBar()}
-      {/* <header className="App-header">
-          <title>
-            Me
-          </title>
-        </header> */}
-
       <Grid container direction="row" justifyContent="center" alignItems="center">
         <Grid item xs={6}>
           {Chart()}
-          asd
-          asd
-          asd
-          <Button variant="contained" color="primary"> asd </Button>
+          asd asd asd
+          <Button variant="contained" color="primary">
+            {" "}
+            asd{" "}
+          </Button>
         </Grid>
         <Grid item xs={6}>
-          {TestSelect()}
+          <Select options={supplyDetOptions} onChange={(e) => handleDeterminantChange(e)} />
+          <SubDeterminant determinant={selectedDeterminant} />
         </Grid>
       </Grid>
     </Container>
