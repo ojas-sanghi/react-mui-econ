@@ -93,7 +93,7 @@ function TopBar() {
   );
 }
 
-function RowRadioButtonsGroup() {
+function DetChangeRadioButtons() {
   return (
     <FormControl>
       <RadioGroup row>
@@ -143,16 +143,10 @@ function App() {
         {/* Chart */}
         <Grid item xs={6}>
           {Chart()}
-          asd asd asd
-          <Button variant="contained" color="primary">
-            {" "}
-            asd{" "}
-          </Button>
         </Grid>
 
-        {/* Column with all the stuff */}
+        {/* SUPPLY STUFF */}
         <Grid item xs={6}>
-          {/* SUPPLY STUFF */}
 
           <Typography variant="h5" component="div" gutterBottom>
             Supply
@@ -171,6 +165,9 @@ function App() {
             </Grid>
           </Grid>
 
+
+          <br />
+
           {/* Supply Sub-Det Row */}
           <Grid container alignItems="center">
             <Grid item xs={3}>
@@ -184,6 +181,8 @@ function App() {
             </Grid>
           </Grid>
 
+          <br />
+
           {/* Supply Incerase/Decrease Row */}
           <Grid container alignItems="center">
             <Grid item xs={3}>
@@ -193,7 +192,7 @@ function App() {
             </Grid>
 
             <Grid item sx={{ flexGrow: 1 }}>
-              {RowRadioButtonsGroup()}
+              {DetChangeRadioButtons()}
             </Grid>
           </Grid>
 
@@ -203,6 +202,9 @@ function App() {
           <Divider />
 
           {/* DEMAND STUFF */}
+          {/*  insert grid etc */}
+
+
         </Grid>
       </Grid>
     </Container>
