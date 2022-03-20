@@ -3,11 +3,36 @@ import "./App.css";
 import "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import faker from "@faker-js/faker";
-import { Box, Container, AppBar, Toolbar, Typography, Grid, styled, Paper, Button } from "@mui/material";
+import {
+  Box,
+  Container,
+  AppBar,
+  Toolbar,
+  Typography,
+  Grid,
+  styled,
+  Paper,
+  Button,
+  Divider,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+} from "@mui/material";
 import Select, { SingleValue } from "react-select";
 import { Determinant, SubDeterminant } from "./shift-calc/Determinant";
 import { supplyDeterminants, demandDeterminants, emptySubDet, emptyDet } from "./shift-calc/AllDeterminants";
-import { ShiftBehaviors } from "./shift-calc/ShiftEnums";
+
+const supplyDetOptions = supplyDeterminants.map((det) => ({
+  value: det,
+  label: det.shortName,
+}));
+
+const demandDetOptions = demandDeterminants.map((det) => ({
+  value: det,
+  label: det.shortName,
+}));
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -68,16 +93,17 @@ function TopBar() {
   );
 }
 
-const supplyDetOptions = supplyDeterminants.map((det) => ({
-  value: det,
-  label: det.shortName,
-}));
-
-const demandDetOptions = demandDeterminants.map((det) => ({
-  value: det,
-  label: det.shortName,
-}));
-
+function RowRadioButtonsGroup() {
+  return (
+    <FormControl>
+      <RadioGroup row>
+      <FormControlLabel value="ooo  " control={<Radio />} label="None" />
+        <FormControlLabel value="female" control={<Radio />} label="Increase" />
+        <FormControlLabel value="male" control={<Radio />} label="Decrease" />
+      </RadioGroup>
+    </FormControl>
+  );
+}
 
 function App() {
   const [selectedDeterminant, setSelectedDeterminant] = useState(emptyDet);
@@ -92,8 +118,7 @@ function App() {
     setSelectedDeterminant(det);
   }
 
-  function handleSubDeterminantChange(subDeterminantVal: SingleValue<{ value: SubDeterminant; label: string }>)
-  {
+  function handleSubDeterminantChange(subDeterminantVal: SingleValue<{ value: SubDeterminant; label: string }>) {
     console.log(subDeterminantVal);
   }
 
@@ -101,19 +126,21 @@ function App() {
     if (determinant.subDeterminants.length === 0) {
       return <Select isDisabled={true} placeholder="No sub-determinants available" />;
     }
-  
+
     var subDetOptions = determinant.subDeterminants.map((subDet) => ({
       value: subDet,
       label: subDet.shortName,
     }));
-  
+
     return <Select options={subDetOptions} onChange={handleSubDeterminantChange} />;
   };
 
   return (
     <Container maxWidth={false} disableGutters={true}>
       {TopBar()}
+
       <Grid container direction="row" justifyContent="center" alignItems="center">
+        {/* Chart */}
         <Grid item xs={6}>
           {Chart()}
           asd asd asd
@@ -122,9 +149,60 @@ function App() {
             asd{" "}
           </Button>
         </Grid>
+
+        {/* Column with all the stuff */}
         <Grid item xs={6}>
-          <Select options={supplyDetOptions} onChange={(e) => handleDeterminantChange(e)} />
-          <SubDeterminant determinant={selectedDeterminant} />
+          {/* SUPPLY STUFF */}
+
+          <Typography variant="h5" component="div" gutterBottom>
+            Supply
+          </Typography>
+
+          {/* Demand Det Row */}
+          <Grid container alignItems="center">
+            <Grid item xs={3}>
+              <Typography variant="subtitle1" gutterBottom component="div">
+                Select determinant:
+              </Typography>
+            </Grid>
+
+            <Grid item sx={{ flexGrow: 1 }}>
+              <Select options={supplyDetOptions} onChange={(e) => handleDeterminantChange(e)} />
+            </Grid>
+          </Grid>
+
+          {/* Supply Sub-Det Row */}
+          <Grid container alignItems="center">
+            <Grid item xs={3}>
+              <Typography variant="subtitle1" gutterBottom component="div">
+                Select sub-determinant:
+              </Typography>
+            </Grid>
+
+            <Grid item sx={{ flexGrow: 1 }}>
+              <SubDeterminant determinant={selectedDeterminant} />
+            </Grid>
+          </Grid>
+
+          {/* Supply Incerase/Decrease Row */}
+          <Grid container alignItems="center">
+            <Grid item xs={3}>
+              <Typography variant="subtitle1" gutterBottom component="div">
+                Select change:
+              </Typography>
+            </Grid>
+
+            <Grid item sx={{ flexGrow: 1 }}>
+              {RowRadioButtonsGroup()}
+            </Grid>
+          </Grid>
+
+          {/* DIVIDER */}
+
+          <br />
+          <Divider />
+
+          {/* DEMAND STUFF */}
         </Grid>
       </Grid>
     </Container>
