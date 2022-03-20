@@ -122,7 +122,7 @@ function App() {
 
   const SubDeterminant = ({ determinant }: { determinant: Determinant }) => {
     if (determinant.subDeterminants.length === 0) {
-      return <Select isDisabled={true} placeholder="No sub-determinants available" />;
+      return <Select isDisabled={true} placeholder="No sub-determinants" />;
     }
 
     var subDetOptions = determinant.subDeterminants.map((subDet) => ({
